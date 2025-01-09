@@ -1,0 +1,68 @@
+﻿@model Domain.Models.ShoppingCart
+
+@{
+    ViewBag.Title = "Shopping Cart Details";
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<h2 class="text-center mb-4">Shopping Cart Details</h2>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title text-primary mb-4">Shopping Cart Information</h4>
+
+                    <dl class="row">
+                        <dt class="col-sm-4">Owner Name:</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.Owner != null)
+                            {
+                                @($"{Model.Owner.FirstName} {Model.Owner.LastName}")
+                            }
+                            else
+                            {
+                                <span>Unknown</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">Owner Email:</dt>
+                        <dd class="col-sm-8">@Model.Owner?.Email ?? "N/A"</dd>
+
+                        <dt class="col-sm-4">Address:</dt>
+                        <dd class="col-sm-8">@Model.Owner?.Address ?? "N/A"</dd>
+
+                        <dt class="col-sm-4">Total Items:</dt>
+                        <dd class="col-sm-8">@Model.BooksInShoppingCarts?.Count() ?? 0</dd>
+
+                        <dt class="col-sm-4">Books:</dt>
+                        <dd class="col-sm-8">
+                            <ul class="list-group">
+                                @if (Model.BooksInShoppingCarts != null && Model.BooksInShoppingCarts.Any())
+                                {
+                                    foreach (var bookItem in Model.BooksInShoppingCarts)
+                                    {
+                                        <li class="list-group-item">
+                                            <strong>@bookItem.Book.Title</strong> - Quantity: @bookItem.Quantity
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li class="list-group-item">No books in cart.</li>
+                                }
+                            </ul>
+                        </dd>
+                    </dl>
+
+                    <div class="text-center mt-4">
+                        <a href="/ShoppingCarts/Edit/@Model.Id" class="btn btn-warning">Edit</a>
+                        <a href="/ShoppingCarts/Index" class="btn btn-secondary ml-3">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

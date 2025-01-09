@@ -1,0 +1,58 @@
+﻿@model Domain.Models.Book
+
+@{
+    ViewBag.Title = "Book Details";
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<h2 class="text-center mb-4">Book Details</h2>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title text-primary mb-4">Book Information</h4>
+
+                    <dl class="row">
+                        <dt class="col-sm-4">Title:</dt>
+                        <dd class="col-sm-8">@Model.Title</dd>
+
+                        <dt class="col-sm-4">Description:</dt>
+                        <dd class="col-sm-8">@Model.Description</dd>
+
+                        <dt class="col-sm-4">Price:</dt>
+                        <dd class="col-sm-8">$@Model.Price</dd>
+
+                        <dt class="col-sm-4">Rating:</dt>
+                        <dd class="col-sm-8">@Model.Rating</dd>
+
+                        <dt class="col-sm-4">Author:</dt>
+                        <dd class="col-sm-8">@Model.Author?.FullName ?? "N/A"</dd>
+
+                        <dt class="col-sm-4">Publisher:</dt>
+                        <dd class="col-sm-8">@Model.Publisher?.Name ?? "N/A"</dd>
+                    </dl>
+
+                    <h5 class="mt-4 text-primary">Cover Image</h5>
+                    @if (!string.IsNullOrEmpty(Model.CoverImage))
+                    {
+                        <div class="mb-4">
+                            <img src="@Model.CoverImage" alt="@Model.Title" class="img-fluid" style="max-width: 100%; height: auto;" />
+                        </div>
+                    }
+                    else
+                    {
+                        <p>No cover image available.</p>
+                    }
+
+                    <div class="text-center mt-4">
+                        <a href="@Url.Action("Edit", "Books", new { id = Model.Id })" class="btn btn-warning">Edit</a>
+                        <a href="@Url.Action("Index", "Books")" class="btn btn-secondary ml-3">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

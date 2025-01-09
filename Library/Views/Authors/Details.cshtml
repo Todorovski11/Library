@@ -1,0 +1,55 @@
+﻿@model Domain.Models.Author
+
+@{
+    ViewBag.Title = "Author Details";
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<h2 class="text-center mb-4">Author Details</h2>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title text-primary mb-4">Author Information</h4>
+
+                    <dl class="row">
+                        <dt class="col-sm-4">First Name:</dt>
+                        <dd class="col-sm-8">@Model.FirstName</dd>
+
+                        <dt class="col-sm-4">Last Name:</dt>
+                        <dd class="col-sm-8">@Model.LastName</dd>
+
+                        <dt class="col-sm-4">Full Name:</dt>
+                        <dd class="col-sm-8">@Model.FullName</dd>
+
+                        <dt class="col-sm-4">Books Count:</dt>
+                        <dd class="col-sm-8">@Model.Books?.Count() ?? 0</dd>
+                    </dl>
+
+                    <h5 class="mt-4 text-primary">Books</h5>
+                    <ul class="list-group mb-4">
+                        @if (Model.Books != null && Model.Books.Any())
+                        {
+                            foreach (var book in Model.Books)
+                            {
+                                <li class="list-group-item">@book.Title</li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="list-group-item">No books available.</li>
+                        }
+                    </ul>
+
+                    <div class="text-center mt-4">
+                        <a href="@Url.Action("Edit", "Authors", new { id = Model.Id })" class="btn btn-warning">Edit</a>
+                        <a href="@Url.Action("Index", "Authors")" class="btn btn-secondary ml-3">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
