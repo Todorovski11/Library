@@ -18,20 +18,23 @@ builder.Services.AddRazorPages();
 // Configure the connection string for the database.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
+var travelAppConnectionString = builder.Configuration.GetConnectionString("TravelAppConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 // Register the DbContext with dependency injection.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
-
+builder.Services.AddDbContext<TravelAppDbContext>(options =>
+    options.UseSqlServer(travelAppConnectionString));
 //// Register repositories and services with dependency injection.
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-
+builder.Services.AddScoped<ITravelService, TravelService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<IPublisherService, PublisherService>();
+
 
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IOrderService, OrderService>();

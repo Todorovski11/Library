@@ -1,0 +1,50 @@
+﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@Html.AntiForgeryToken()
+
+@model IEnumerable<Domain.TravelApp.TravelItenaries>
+
+@{
+    ViewBag.Title = "Travel Itineraries";
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<h2 class="text-center mb-4">Travel Itineraries</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Day Number</th>
+                        <th>Place</th>
+                        <th>Arrival Time</th>
+                        <th>Departure Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var itinerary in Model)
+                    {
+                        <tr>
+                            <td>@itinerary.Name</td>
+                            <td>@itinerary.Description</td>
+                            <td>@(itinerary.DayNumber ?? 0)</td>
+                            <td>@itinerary.Place</td>
+                            <td>@(itinerary.ArivalTime?.ToString("yyyy-MM-dd HH:mm") ?? "N/A")</td>
+                            <td>@(itinerary.DepartutreTime?.ToString("yyyy-MM-dd HH:mm") ?? "N/A")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+

@@ -1,5 +1,6 @@
 ﻿using Domain.Identity;
 using Domain.Models;
+using Domain.TravelApp;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,5 +24,13 @@ namespace Repository
         public virtual DbSet<BookInOrder> BooksInOrders { get; set; }
         public virtual DbSet<Author> Authors { get; set; }
         public virtual DbSet<Publisher> Publishers { get; set; }
+    }
+    public class TravelAppDbContext : DbContext
+    {
+        public DbSet<TravelItenaries> TravelItenaries { get; set; }
+        public TravelAppDbContext(DbContextOptions<TravelAppDbContext> options)
+           : base(options)
+        {
+        }
     }
 }

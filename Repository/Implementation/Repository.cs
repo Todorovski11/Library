@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Domain.TravelApp;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interface;
 using System;
@@ -12,51 +13,50 @@ namespace Repository.Implementation
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly ApplicationDbContext context;
+        private readonly TravelAppDbContext travelContext;
         private DbSet<T> entities;
+        private DbSet<TravelItenaries> travelItenaries;
         string errorMessage = string.Empty;
 
-        public Repository(ApplicationDbContext context)
+        public Repository(ApplicationDbContext context, TravelAppDbContext travelContext)
         {
             this.context = context;
+            this.travelContext = travelContext;
             entities = context.Set<T>();
-            //entities = context.Set<T>();
+            travelItenaries = travelContext.Set<TravelItenaries>();
         }
 
         public IEnumerable<T> GetAll()
         {
             if (typeof(T) == typeof(Order))
             {
-                var query = entities
+                return entities
                     .Include("BooksInOrder.Book")
                     .Include("Owner")
-                    .AsQueryable();
-
-                return query.AsEnumerable();
+                    .AsEnumerable();
             }
             else if (typeof(T) == typeof(Book))
             {
-                var query = entities
+                return entities
                     .Include("Author")
                     .Include("Publisher")
-                    .AsQueryable();
-
-                return query.AsEnumerable();
+                    .AsEnumerable();
             }
             else if (typeof(T) == typeof(Author))
             {
-                var query = entities
+                return entities
                     .Include("Books")
-                    .AsQueryable();
-
-                return query.AsEnumerable();
+                    .AsEnumerable();
             }
             else if (typeof(T) == typeof(Publisher))
             {
-                var query = entities
+                return entities
                     .Include("Books")
-                    .AsQueryable();
-
-                return query.AsEnumerable();
+                    .AsEnumerable();
+            }
+            else if (typeof(T) == typeof(TravelItenaries))
+            {
+                return travelItenaries.AsEnumerable().Cast<T>();
             }
             else
             {
