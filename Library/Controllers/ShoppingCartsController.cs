@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Service.Interface;
-using Stripe;
+//using Stripe;
 using System.Security.Claims;
 
 namespace Library.Controllers
@@ -17,13 +17,23 @@ namespace Library.Controllers
             this._shoppingCartService = _shoppingCartService;
         }
 
-        // GET: ShoppingCarts
         public async Task<IActionResult> Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account"); // Or handle unauthorized access
+            }
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(); // Handle missing UserId case
+            }
+
             var dto = _shoppingCartService.GetShoppingCartInfo(userId);
             return View(dto);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> DeleteFromShoppingCart(Guid id)
@@ -53,42 +63,42 @@ namespace Library.Controllers
         }
 
 
-        public IActionResult PayOrder(string stripeEmail, string stripeToken)
-        {
-            StripeConfiguration.ApiKey = "sk_test_51Io84IHBiOcGzrvu4sxX66rTHq8r5nxIxRiJPbOHB4NwVJOE1jSlxgYe741ITs024uXhtpBFtxm3RoCZc3kafocC00IhvgxkL0";
+        //public IActionResult PayOrder(string stripeEmail, string stripeToken)
+        //{
+        //    StripeConfiguration.ApiKey = "sk_test_51Io84IHBiOcGzrvu4sxX66rTHq8r5nxIxRiJPbOHB4NwVJOE1jSlxgYe741ITs024uXhtpBFtxm3RoCZc3kafocC00IhvgxkL0";
 
-            var customerService = new CustomerService();
-            var chargeService = new ChargeService();
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var customerService = new CustomerService();
+        //    var chargeService = new ChargeService();
+        //    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var order = _shoppingCartService.GetShoppingCartInfo(userId);
+        //    var order = _shoppingCartService.GetShoppingCartInfo(userId);
 
-            var customer = customerService.Create(new CustomerCreateOptions
-            {
-                Email = stripeEmail,
-                Source = stripeToken
-            });
+        //    var customer = customerService.Create(new CustomerCreateOptions
+        //    {
+        //        Email = stripeEmail,
+        //        Source = stripeToken
+        //    });
 
-            var charge = chargeService.Create(new ChargeCreateOptions
-            {
-                Amount = (Convert.ToInt32(order.TotalPrice) * 100),
-                Description = "EShop Application Payment",
-                Currency = "usd",
-                Customer = customer.Id
-            });
+        //    var charge = chargeService.Create(new ChargeCreateOptions
+        //    {
+        //        Amount = (Convert.ToInt32(order.TotalPrice) * 100),
+        //        Description = "EShop Application Payment",
+        //        Currency = "usd",
+        //        Customer = customer.Id
+        //    });
 
-            if (charge.Status == "succeeded")
-            {
-                this.Order();
+        //    if (charge.Status == "succeeded")
+        //    {
+        //        this.Order();
 
-                // Return JSON response for AJAX
-                return Json(new { success = true, message = "Payment succeeded!" });
-            }
-            else
-            {
-                // Return JSON response for AJAX
-                return Json(new { success = false, message = "Payment failed." });
-            }
-        }
+        //        // Return JSON response for AJAX
+        //        return Json(new { success = true, message = "Payment succeeded!" });
+        //    }
+        //    else
+        //    {
+        //        // Return JSON response for AJAX
+        //        return Json(new { success = false, message = "Payment failed." });
+        //    }
+        //}
     }
 }
